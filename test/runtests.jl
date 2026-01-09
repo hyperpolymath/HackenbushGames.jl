@@ -15,7 +15,7 @@ using HackenbushGames
             Edge(0, 1, Green),
             Edge(1, 2, Green),
         ]
-        g = HackenbushGraph(edges, 0)
+        g = HackenbushGraph(edges, [0])
         @test green_grundy(g) == 2
     end
 
@@ -24,8 +24,21 @@ using HackenbushGames
             Edge(0, 1, Blue),
             Edge(1, 2, Red),
         ]
-        g = HackenbushGraph(edges, 0)
+        g = HackenbushGraph(edges, [0])
         @test length(moves(g, :left)) == 1
         @test length(moves(g, :right)) == 1
+    end
+
+    @testset "Graph Sum" begin
+        a = simple_stalk([Blue, Red])
+        b = simple_stalk([Green])
+        s = game_sum(a, b)
+        @test length(s.edges) == length(a.edges) + length(b.edges)
+    end
+
+    @testset "GraphViz" begin
+        g = simple_stalk([Green])
+        dot = to_graphviz(g)
+        @test occursin("graph Hackenbush", dot)
     end
 end

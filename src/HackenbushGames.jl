@@ -2,9 +2,10 @@ module HackenbushGames
 
 export EdgeColor, Edge, HackenbushGraph
 export Blue, Red, Green
-export prune_disconnected, cut_edge, moves
+export prune_disconnected, cut_edge, moves, game_sum
 export simplest_dyadic_between, stalk_value
 export mex, nim_sum, green_stalk_nimber, green_grundy
+export simple_stalk, to_graphviz
 
 @enum EdgeColor Blue Red Green
 
@@ -18,11 +19,11 @@ struct Edge
 end
 
 """
-Represents a Hackenbush position as an edge list and a ground node.
+Represents a Hackenbush position as an edge list and ground nodes.
 """
 struct HackenbushGraph
     edges::Vector{Edge}
-    ground::Int
+    ground::Vector{Int}
 end
 
 function _neighbors(edges::Vector{Edge})
@@ -35,12 +36,12 @@ function _neighbors(edges::Vector{Edge})
 end
 
 """
-Remove edges disconnected from the ground node.
+Remove edges disconnected from any ground node.
 """
 function prune_disconnected(graph::HackenbushGraph)
     neighbors = _neighbors(graph.edges)
     reachable = Set{Int}()
-    stack = [graph.ground]
+    stack = collect(graph.ground)
     while !isempty(stack)
         node = pop!(stack)
         if node in reachable
@@ -100,6 +101,20 @@ function moves(graph::HackenbushGraph, player::Symbol)
         end
     end
     options
+end
+
+"""
+Sum of two graphs as a disjoint union.
+"""
+function game_sum(a::HackenbushGraph, b::HackenbushGraph)
+    max_node = isempty(a.edges) ? (isempty(a.ground) ? 0 : maximum(a.ground)) : maximum([max(e.u, e.v) for e in a.edges])
+    offset = max_node + 1
+    shifted = Edge[]
+    for e in b.edges
+        push!(shifted, Edge(e.u + offset, e.v + offset, e.color))
+    end
+    ground = vcat(a.ground, [g + offset for g in b.ground])
+    HackenbushGraph(vcat(a.edges, shifted), ground)
 end
 
 """
@@ -176,8 +191,8 @@ Nimber for a green stalk of given height.
 green_stalk_nimber(height::Int) = height
 
 function _graph_key(graph::HackenbushGraph)
-    edges = sort([(min(e.u, e.v), max(e.u, e.v)) for e in graph.edges])
-    (graph.ground, edges)
+    edges = sort([(min(e.u, e.v), max(e.u, e.v), Int(e.color)) for e in graph.edges])
+    (sort(graph.ground), edges)
 end
 
 """
@@ -213,6 +228,34 @@ function green_grundy(graph::HackenbushGraph)
     end
 
     _grundy(graph)
+end
+
+"""
+Create a simple stalk graph from a color sequence.
+"""
+function simple_stalk(colors::Vector{EdgeColor})
+    edges = Edge[]
+    for i in 1:length(colors)
+        push!(edges, Edge(i - 1, i, colors[i]))
+    end
+    HackenbushGraph(edges, [0])
+end
+
+"""
+Return a GraphViz DOT diagram for a position.
+"""
+function to_graphviz(graph::HackenbushGraph)
+    lines = String[]
+    push!(lines, "graph Hackenbush {")
+    for g in graph.ground
+        push!(lines, "  $g [shape=box,label=\"ground\"];\n")
+    end
+    for (i, e) in enumerate(graph.edges)
+        color = e.color == Blue ? "blue" : e.color == Red ? "red" : "green"
+        push!(lines, "  $(e.u) -- $(e.v) [color=$color,label=\"$i\"];\n")
+    end
+    push!(lines, "}")
+    join(lines, "")
 end
 
 end # module

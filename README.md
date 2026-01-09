@@ -2,8 +2,9 @@
 
 HackenbushGames.jl is a Julia toolkit for experimenting with Hackenbush
 positions and the combinatorial game theory ideas from Padraic Bartlett’s
-“A Short Guide to Hackenbush” (VIGRE REU 2006). It provides a clean, small
-API for building graphs, cutting edges, and evaluating basic classes of games.
+“A Short Guide to Hackenbush” (VIGRE REU 2006). It provides a small API for
+building graphs, cutting edges, evaluating basic positions, and exporting
+visualizations.
 
 This project emphasizes transparent rules over heavy automation. It includes
 simple evaluators for stalks and small green graphs plus utilities for nimbers
@@ -15,6 +16,7 @@ and dyadic rationals.
 - Compute dyadic values for **Red-Blue stalks** (linear chains).
 - Compute nimbers for **Green stalks** and **small Green graphs**.
 - Helpers for nim-sum and minimal excluded value (mex).
+- Graph sum composition and GraphViz export.
 
 ## Quick Start
 
@@ -32,7 +34,7 @@ edges = [
     Edge(1, 2, Green),
     Edge(1, 3, Green),
 ]
-position = HackenbushGraph(edges, 0)
+position = HackenbushGraph(edges, [0])
 println(green_grundy(position))
 ```
 
@@ -42,6 +44,7 @@ println(green_grundy(position))
   to identify dyadic rationals for stalks.
 - **Green Hackenbush** is impartial and can be evaluated via nimbers.
   This package uses a Grundy-number search for small graphs.
+- **Graph sums** are supported for building disjoint unions.
 - **Colon and Fusion** rules and the “flower/jungle” ideas are described in
   the guide; in this package they are documented as concepts and can be
   layered into higher-level analysis later.
