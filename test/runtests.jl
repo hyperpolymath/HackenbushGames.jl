@@ -41,4 +41,18 @@ using HackenbushGames
         dot = to_graphviz(g)
         @test occursin("graph Hackenbush", dot)
     end
+
+    @testset "Canonical Form" begin
+        g = simple_stalk([Blue])
+        value = game_value(g)
+        @test value == 1//1
+        form = canonical_game(g)
+        @test isempty(form.right)
+    end
+
+    @testset "ASCII" begin
+        g = simple_stalk([Red, Blue])
+        ascii = to_ascii(g)
+        @test occursin("HackenbushGraph", ascii)
+    end
 end

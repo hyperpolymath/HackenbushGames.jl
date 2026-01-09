@@ -5,7 +5,8 @@ export Blue, Red, Green
 export prune_disconnected, cut_edge, moves, game_sum
 export simplest_dyadic_between, stalk_value
 export mex, nim_sum, green_stalk_nimber, green_grundy
-export simple_stalk, to_graphviz
+export simple_stalk, to_graphviz, to_ascii
+export GameForm, canonical_game, simplify_game, game_value
 
 @enum EdgeColor Blue Red Green
 
@@ -24,6 +25,14 @@ Represents a Hackenbush position as an edge list and ground nodes.
 struct HackenbushGraph
     edges::Vector{Edge}
     ground::Vector{Int}
+end
+
+"""
+Canonical game form {L|R} for numeric options.
+"""
+struct GameForm
+    left::Vector{Rational{Int}}
+    right::Vector{Rational{Int}}
 end
 
 function _neighbors(edges::Vector{Edge})
@@ -256,6 +265,88 @@ function to_graphviz(graph::HackenbushGraph)
     end
     push!(lines, "}")
     join(lines, "")
+end
+
+"""
+Render a simple ASCII listing for a graph.
+"""
+function to_ascii(graph::HackenbushGraph)
+    lines = ["HackenbushGraph:"]
+    push!(lines, "Ground: $(graph.ground)")
+    for (i, e) in enumerate(graph.edges)
+        color = e.color == Blue ? "B" : e.color == Red ? "R" : "G"
+        push!(lines, "  $i: $(e.u) - $(e.v) [$color]")
+    end
+    join(lines, "\n")
+end
+
+"""
+Build the canonical game form {L|R} for small graphs.
+"""
+function canonical_game(graph::HackenbushGraph; max_depth::Int=6)
+    function eval_game(g::HackenbushGraph, depth::Int)
+        if isempty(g.edges) || depth <= 0
+            return GameForm(Rational{Int}[], Rational{Int}[])
+        end
+
+        left_vals = Rational{Int}[]
+        right_vals = Rational{Int}[]
+        for option in moves(g, :left)
+            val = game_value(option; max_depth=depth - 1)
+            val === nothing || push!(left_vals, val)
+        end
+        for option in moves(g, :right)
+            val = game_value(option; max_depth=depth - 1)
+            val === nothing || push!(right_vals, val)
+        end
+        simplify_game(GameForm(left_vals, right_vals))
+    end
+
+    eval_game(graph, max_depth)
+end
+
+"""
+Remove dominated options from a game form.
+"""
+function simplify_game(form::GameForm)
+    left = unique(form.left)
+    right = unique(form.right)
+
+    # Left prefers higher values; remove dominated lower options.
+    if !isempty(left)
+        best = maximum(left)
+        left = [v for v in left if v == best]
+    end
+
+    # Right prefers lower values; remove dominated higher options.
+    if !isempty(right)
+        best = minimum(right)
+        right = [v for v in right if v == best]
+    end
+
+    GameForm(left, right)
+end
+
+"""
+Compute a numeric value for small dyadic games.\nReturns nothing when non-numeric options are present.
+"""
+function game_value(graph::HackenbushGraph; max_depth::Int=6)
+    form = canonical_game(graph; max_depth=max_depth)
+    left = form.left
+    right = form.right
+
+    if isempty(left) && isempty(right)
+        return 0//1
+    elseif isempty(right)
+        return maximum(left) + 1
+    elseif isempty(left)
+        return minimum(right) - 1
+    end
+
+    lmax = maximum(left)
+    rmin = minimum(right)
+    lmax < rmin || return nothing
+    simplest_dyadic_between(lmax, rmin)
 end
 
 end # module

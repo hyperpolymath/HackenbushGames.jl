@@ -17,6 +17,8 @@ and dyadic rationals.
 - Compute nimbers for **Green stalks** and **small Green graphs**.
 - Helpers for nim-sum and minimal excluded value (mex).
 - Graph sum composition and GraphViz export.
+- Canonical {L|R} notation and numeric evaluation for small games.
+- ASCII visualization helper.
 
 ## Quick Start
 
@@ -36,6 +38,12 @@ edges = [
 ]
 position = HackenbushGraph(edges, [0])
 println(green_grundy(position))
+```
+
+```julia
+g = simple_stalk([Blue, Red, Blue])
+println(game_value(g))       # dyadic value if numeric
+println(to_ascii(g))
 ```
 
 ## Model Notes (Based on the Bartlett Guide)
