@@ -69,3 +69,14 @@ algorithms or structural simplifications.
 julia --project=. -e 'using Pkg; Pkg.instantiate()'
 julia --project=. -e 'using Pkg; Pkg.test()'
 ```
+
+## API Snapshot
+
+```julia
+EdgeColor, Edge, HackenbushGraph
+prune_disconnected, cut_edge, moves, game_sum
+simple_stalk, to_ascii, to_graphviz
+GameForm, canonical_game, simplify_game, game_value
+stalk_value, simplest_dyadic_between
+mex, nim_sum, green_stalk_nimber, green_grundy
+```
