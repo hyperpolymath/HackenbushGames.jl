@@ -1,4 +1,9 @@
+[![License](https://img.shields.io/badge/license-PMPL--1.0-blue.svg)](https://github.com/hyperpolymath/palimpsest-license)
+
 # HackenbushGames.jl
+
+
+
 
 HackenbushGames.jl is a Julia toolkit for experimenting with Hackenbush
 positions and the combinatorial game theory ideas from Padraic Bartlett’s
