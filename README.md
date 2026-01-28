@@ -15,6 +15,20 @@ This project emphasizes transparent rules over heavy automation. It includes
 simple evaluators for stalks and small green graphs plus utilities for nimbers
 and dyadic rationals.
 
+## Installation
+
+### From Julia REPL
+```julia
+using Pkg
+Pkg.add("HackenbushGames")
+```
+
+### From Git (Development)
+```julia
+using Pkg
+Pkg.add(url="https://github.com/hyperpolymath/HackenbushGames.jl")
+```
+
 ## Features
 
 - Build Red/Blue/Green Hackenbush graphs and generate legal moves.
