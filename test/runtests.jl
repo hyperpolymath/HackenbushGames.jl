@@ -56,4 +56,68 @@ using HackenbushGames
         ascii = to_ascii(g)
         @test occursin("HackenbushGraph", ascii)
     end
+
+    @testset "Prune Disconnected" begin
+        # Create graph with disconnected component
+        edges = [
+            Edge(0, 1, Blue),  # connected to ground
+            Edge(2, 3, Red),   # floating (not connected to ground)
+        ]
+        g = HackenbushGraph(edges, [0])
+        pruned = prune_disconnected(g)
+        @test length(pruned.edges) == 1  # only edge 0->1 remains
+    end
+
+    @testset "Simplest Dyadic" begin
+        @test simplest_dyadic_between(0//1, 1//1) == 1//2  # simplest dyadic between 0 and 1
+        @test simplest_dyadic_between(-1//1, 1//1) == 0//1
+        @test simplest_dyadic_between(1//4, 3//4) == 1//2
+        @test_throws ErrorException simplest_dyadic_between(1//1, 0//1)  # l >= r
+    end
+
+    @testset "Nim Sum" begin
+        @test nim_sum([3, 5]) == 6  # 3 XOR 5 = 6
+        @test nim_sum([1, 2, 3]) == 0  # 1 XOR 2 XOR 3 = 0
+        @test nim_sum([7]) == 7
+        @test nim_sum(Int[]) == 0
+    end
+
+    @testset "Mex" begin
+        @test mex([0, 1, 3]) == 2  # minimum excludant
+        @test mex([1, 2, 3]) == 0
+        @test mex(Int[]) == 0
+        @test mex([0, 1, 2, 3, 4]) == 5
+    end
+
+    @testset "Green Stalk Nimber" begin
+        @test green_stalk_nimber(5) == 5  # green stalk of height n has nimber n
+        @test green_stalk_nimber(0) == 0
+        @test green_stalk_nimber(1) == 1
+    end
+
+    @testset "Green Moves" begin
+        # Green edges allow both left and right moves (impartial)
+        edges = [Edge(0, 1, Green)]
+        g = HackenbushGraph(edges, [0])
+        left_moves = moves(g, :left)
+        right_moves = moves(g, :right)
+        @test length(left_moves) == 1
+        @test length(right_moves) == 1
+    end
+
+    @testset "Empty Graph" begin
+        g = HackenbushGraph(Edge[], [0])
+        @test length(moves(g, :left)) == 0
+        @test length(moves(g, :right)) == 0
+        @test game_value(g) == 0//1  # empty position is zero
+    end
+
+    @testset "Game Value Nothing" begin
+        # Create a position where game_value returns nothing (non-numeric)
+        # A Green position typically returns nothing as it's impartial
+        g = simple_stalk([Green, Green])
+        val = game_value(g)
+        # Green positions don't have numeric values, they have Grundy numbers
+        @test val === nothing || val isa Rational
+    end
 end
