@@ -2,15 +2,14 @@
 
 ## Current State (v1.0)
 
-Production-ready Hackenbush game implementation:
+Functional beta Hackenbush game implementation:
 - Red, Blue, Green (neutral) edges
 - Conway's surreal number evaluation
 - Canonical form computation
-- Game comparison (>, <, =, ||)
-- Basic game operations (negation, addition)
+- Basic game operations (addition via game_sum)
 - Simplification algorithms
 
-**Status:** Complete with security hardening and comprehensive test coverage.
+**Status:** Core algorithms implemented. Test coverage is basic (35 test cases).
 
 ---
 
