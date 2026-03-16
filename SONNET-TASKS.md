@@ -84,13 +84,13 @@ ls /var/mnt/eclipse/repos/HackenbushGames.jl/.machine_readable/STATE.scm \
 
 **Files:** `/var/mnt/eclipse/repos/HackenbushGames.jl/CONTRIBUTING.md`
 
-**Problem:** Lines 2, 3, 9, 10, 20, 89, 90, 91, 92 all contain raw `{{FORGE}}`,
-`{{OWNER}}`, `{{REPO}}` template placeholders.
+**Problem:** Lines 2, 3, 9, 10, 20, 89, 90, 91, 92 all contain raw `github.com`,
+`hyperpolymath`, `HackenbushGames.jl` template placeholders.
 
 **What to do:**
-1. Replace every `{{FORGE}}` with `github.com`
-2. Replace every `{{OWNER}}` with `hyperpolymath`
-3. Replace every `{{REPO}}` with `HackenbushGames.jl`
+1. Replace every `github.com` with `github.com`
+2. Replace every `hyperpolymath` with `hyperpolymath`
+3. Replace every `HackenbushGames.jl` with `HackenbushGames.jl`
 4. Review the entire file to ensure no `{{` tokens remain.
 
 **Verification:**
@@ -104,20 +104,20 @@ grep -c '{{' /var/mnt/eclipse/repos/HackenbushGames.jl/CONTRIBUTING.md && echo "
 
 **Files:** `/var/mnt/eclipse/repos/HackenbushGames.jl/CODE_OF_CONDUCT.md`
 
-**Problem:** Lines 7-14, 313 contain `{{PLACEHOLDER}}`, `{{OWNER}}`, `{{REPO}}`,
-`{{FORGE}}`, `{{PROJECT_NAME}}`, `{{CONDUCT_EMAIL}}`, `{{CONDUCT_TEAM}}`,
-`{{RESPONSE_TIME}}`, `{{CURRENT_YEAR}}` template tokens.
+**Problem:** Lines 7-14, 313 contain `{{PLACEHOLDER}}`, `hyperpolymath`, `HackenbushGames.jl`,
+`github.com`, `HackenbushGames.Jl`, `{{CONDUCT_EMAIL}}`, `{{CONDUCT_TEAM}}`,
+`{{RESPONSE_TIME}}`, `2026` template tokens.
 
 **What to do:**
 1. Delete the template instruction comment block (lines 3-20 approximately).
-2. Replace `{{PROJECT_NAME}}` with `HackenbushGames.jl`
-3. Replace `{{OWNER}}` with `hyperpolymath`
-4. Replace `{{REPO}}` with `HackenbushGames.jl`
-5. Replace `{{FORGE}}` with `github.com`
+2. Replace `HackenbushGames.Jl` with `HackenbushGames.jl`
+3. Replace `hyperpolymath` with `hyperpolymath`
+4. Replace `HackenbushGames.jl` with `HackenbushGames.jl`
+5. Replace `github.com` with `github.com`
 6. Replace `{{CONDUCT_EMAIL}}` with `jonathan.jewell@open.ac.uk`
 7. Replace `{{CONDUCT_TEAM}}` with `Project Maintainers`
 8. Replace `{{RESPONSE_TIME}}` with `48 hours`
-9. Replace `{{CURRENT_YEAR}}` with `2026`
+9. Replace `2026` with `2026`
 
 **Verification:**
 ```bash
@@ -131,18 +131,18 @@ grep -c '{{' /var/mnt/eclipse/repos/HackenbushGames.jl/CODE_OF_CONDUCT.md && ech
 **Files:** `/var/mnt/eclipse/repos/HackenbushGames.jl/SECURITY.md`
 
 **Problem:** Lines 7-16, 43, 61-73, 206, 325, 374, 386-387, 402, 406 contain
-`{{OWNER}}`, `{{REPO}}`, `{{PROJECT_NAME}}`, `{{SECURITY_EMAIL}}`,
-`{{PGP_FINGERPRINT}}`, `{{PGP_KEY_URL}}`, `{{WEBSITE}}`, `{{CURRENT_YEAR}}`
+`hyperpolymath`, `HackenbushGames.jl`, `HackenbushGames.Jl`, `6759885+hyperpolymath@users.noreply.github.com`,
+`[PGP fingerprint not set]`, `{{PGP_KEY_URL}}`, `{{WEBSITE}}`, `2026`
 template tokens.
 
 **What to do:**
 1. Delete the template instruction comment block (lines 3-19).
-2. Replace `{{PROJECT_NAME}}` with `HackenbushGames.jl`
-3. Replace `{{OWNER}}` with `hyperpolymath`
-4. Replace `{{REPO}}` with `HackenbushGames.jl`
-5. Replace `{{SECURITY_EMAIL}}` with `jonathan.jewell@open.ac.uk`
+2. Replace `HackenbushGames.Jl` with `HackenbushGames.jl`
+3. Replace `hyperpolymath` with `hyperpolymath`
+4. Replace `HackenbushGames.jl` with `HackenbushGames.jl`
+5. Replace `6759885+hyperpolymath@users.noreply.github.com` with `jonathan.jewell@open.ac.uk`
 6. Remove the PGP section entirely (lines 60-74) since there is no PGP key configured.
-7. Replace `{{CURRENT_YEAR}}` with `2026`
+7. Replace `2026` with `2026`
 8. Remove `{{WEBSITE}}` references or replace with `https://github.com/hyperpolymath`
 
 **Verification:**
