@@ -243,7 +243,7 @@ grep -c 'coming soon' /var/mnt/eclipse/repos/HackenbushGames.jl/docs/src/index.m
 
 **Problem:** These are RSR template boilerplate files for a ReScript web project. They have
 nothing to do with a Julia Hackenbush game theory library. `SafeDOMExample.res` line 1 also
-has `SPDX-License-Identifier: AGPL-3.0-or-later` (wrong license).
+has `SPDX-License-Identifier: PMPL-1.0-or-later` (wrong license).
 
 **What to do:**
 1. Delete `examples/SafeDOMExample.res`
@@ -300,7 +300,7 @@ test -f /var/mnt/eclipse/repos/HackenbushGames.jl/ROADMAP.md && echo "PASS: real
 **Problem:** All 7 files are unmodified RSR template boilerplate with `{{PROJECT}}` and
 `{{project}}` placeholders throughout (hundreds of occurrences). They define generic
 `Handle`, `Result`, `ExampleStruct` types that have nothing to do with Hackenbush.
-The Zig files have `SPDX-License-Identifier: AGPL-3.0-or-later` (wrong license).
+The Zig files have `SPDX-License-Identifier: PMPL-1.0-or-later` (wrong license).
 This is a pure Julia library with zero FFI needs.
 
 **What to do:**
