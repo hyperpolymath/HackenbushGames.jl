@@ -158,7 +158,7 @@ grep -c '{{' /var/mnt/eclipse/repos/HackenbushGames.jl/SECURITY.md && echo "FAIL
 
 **Problem:** The entire file (lines 1-36) references `rsr-template-repo` instead of
 `HackenbushGames.jl`. The author is listed as `Polymath, Hyper` instead of
-`Jewell, Jonathan D.A.`. The license says `AGPL-3.0-or-later` instead of
+`Jewell, Jonathan D.A.`. The license says `PMPL-1.0-or-later` instead of
 `PMPL-1.0-or-later`. It references `CITATION.cff` and `codemeta.json` which do not exist.
 
 **What to do:**
@@ -166,7 +166,7 @@ grep -c '{{' /var/mnt/eclipse/repos/HackenbushGames.jl/SECURITY.md && echo "FAIL
 2. Replace every occurrence of `RSR-template-repo` in URLs with `HackenbushGames.jl`
 3. Replace author `Polymath, Hyper` with `Jewell, Jonathan D.A.` in all citation formats
 4. Replace author `Hyper Polymath` with `Jonathan D.A. Jewell` in OSCOLA format
-5. Replace `AGPL-3.0-or-later` with `PMPL-1.0-or-later`
+5. Replace `PMPL-1.0-or-later` with `PMPL-1.0-or-later`
 6. Replace year `2025` with `2026`
 7. Remove the `See Also` section referencing non-existent `CITATION.cff` and `codemeta.json`,
    OR create those files (preferred: remove the references).
