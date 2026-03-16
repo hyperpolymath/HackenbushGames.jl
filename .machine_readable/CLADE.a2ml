@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# Clade declaration — part of the gv-clade-index registry
+# See: https://github.com/hyperpolymath/gv-clade-index
+
+[identity]
+uuid = "6aea3153-aea9-5142-9c92-30bf6fbdc49f"
+primary-forge = "github"
+primary-owner = "hyperpolymath"
+canonical-name = "HackenbushGames.jl"
+prefixed-name = "gm-HackenbushGames.jl"
+
+[clade]
+primary = "gm"
+secondary = []
+assigned = "2026-03-16"
+rationale = ""
+
+[forges]
+github = "hyperpolymath/HackenbushGames.jl"
+gitlab = "hyperpolymath/HackenbushGames.jl"
+bitbucket = "hyperpolymath/HackenbushGames.jl"
+
+[lineage]
+type = "standalone"
+parent = "Julia package — combinatorial game theory"
+born = "2026-03-16"
