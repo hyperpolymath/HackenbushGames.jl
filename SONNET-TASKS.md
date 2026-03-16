@@ -114,7 +114,7 @@ grep -c '{{' /var/mnt/eclipse/repos/HackenbushGames.jl/CONTRIBUTING.md && echo "
 3. Replace `hyperpolymath` with `hyperpolymath`
 4. Replace `HackenbushGames.jl` with `HackenbushGames.jl`
 5. Replace `github.com` with `github.com`
-6. Replace `{{CONDUCT_EMAIL}}` with `jonathan.jewell@open.ac.uk`
+6. Replace `{{CONDUCT_EMAIL}}` with `j.d.a.jewell@open.ac.uk`
 7. Replace `{{CONDUCT_TEAM}}` with `Project Maintainers`
 8. Replace `{{RESPONSE_TIME}}` with `48 hours`
 9. Replace `2026` with `2026`
@@ -140,7 +140,7 @@ template tokens.
 2. Replace `HackenbushGames.Jl` with `HackenbushGames.jl`
 3. Replace `hyperpolymath` with `hyperpolymath`
 4. Replace `HackenbushGames.jl` with `HackenbushGames.jl`
-5. Replace `6759885+hyperpolymath@users.noreply.github.com` with `jonathan.jewell@open.ac.uk`
+5. Replace `6759885+hyperpolymath@users.noreply.github.com` with `j.d.a.jewell@open.ac.uk`
 6. Remove the PGP section entirely (lines 60-74) since there is no PGP key configured.
 7. Replace `2026` with `2026`
 8. Remove `{{WEBSITE}}` references or replace with `https://github.com/hyperpolymath`
