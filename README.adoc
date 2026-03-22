@@ -1,0 +1,5 @@
+= HackenbushGames.jl
+:toc: preamble
+:icons: font
+
+
