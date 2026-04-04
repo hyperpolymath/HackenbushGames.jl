@@ -121,3 +121,6 @@ using HackenbushGames
         @test val === nothing || val isa Rational
     end
 end
+
+include("e2e_test.jl")
+include("property_test.jl")
