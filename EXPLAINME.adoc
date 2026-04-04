@@ -1,32 +1,138 @@
 // SPDX-License-Identifier: PMPL-1.0-or-later
 = HackenbushGames.jl — Show Me The Receipts
+Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 :toc:
+:toclevels: 3
 :icons: font
 
-The README makes claims. This file backs them up.
+The README makes claims. This file backs them up with specific code locations,
+honest caveats, and enough trace information for an external reviewer to navigate
+the codebase cold.
 
-[quote, README]
+== Claim 1: Compute dyadic values for Red-Blue stalks and nimbers for Green stalks
+
+[quote, README.md — Features]
 ____
-See the link:README.adoc[README] for details.
+Compute dyadic values for Red-Blue stalks (linear chains). Compute nimbers for
+Green stalks and small Green graphs.
 ____
 
-== Technology Choices
+*How it works:* `stalk_value(colors::Vector{EdgeColor})` in `src/HackenbushGames.jl`
+evaluates a linear Red-Blue stalk using the Simplicity Rule from combinatorial
+game theory. It builds up a `values` array from ground (index 1 = 0//1) to top,
+applying the Simplicity Rule at each position: if there are only Blue edges below,
+the value is `max_left + 1`; if only Red, `min_right - 1`; if both, the simplest
+dyadic rational strictly between the max left option and the min right option.
+The helper `simplest_dyadic_between(l, r; max_pow=30)` iterates over powers of 2,
+looking for the smallest-denominator fraction in the interval.
 
-[cols="1,2"]
-|===
-| Technology | Learn More
+For Green (impartial) positions, `green_grundy(graph::HackenbushGraph)` computes
+the Grundy (nim) value via `mex` over recursive calls to `green_grundy` on each
+position reachable by cutting a single edge. `green_stalk_nimber` provides a fast
+path for linear Green stalks by counting edges mod nim-sum semantics.
 
-| **Julia** | https://julialang.org
-|===
+*Honest caveat:* `green_grundy` is a recursive exhaustive search with no memoisation.
+For positions with more than ~8–10 edges the function will be slow. The Colon and
+Fusion rules are documented in comments as known missing features — not yet
+implemented, as stated in the README's "Model Notes" section.
+
+== Claim 2: Graph sum composition and GraphViz export
+
+[quote, README.md — Features]
+____
+Graph sum composition and GraphViz export. Canonical {L|R} notation and numeric
+evaluation for small games.
+____
+
+*How it works:* `game_sum(a, b)` in `src/HackenbushGames.jl` creates a disjoint
+union of two `HackenbushGraph` values by offsetting all node indices in `b` by
+`max_node_in_a + 1` and concatenating edge and ground lists. No topology is shared.
+
+`to_graphviz(graph)` renders the position to a GraphViz DOT string, colour-coding
+edges as `color=blue`, `color=red`, or `color=green` and marking ground nodes with
+a `shape=doublecircle` attribute. `to_ascii` provides a plain-text fallback.
+
+`canonical_game(graph::HackenbushGraph)` computes the `GameForm{left, right}` by
+collecting all `stalk_value` options reachable by Left and Right moves. `game_value`
+returns the rational value if Left and Right options converge to a numeric game,
+or `nothing` for non-numeric positions.
+
+*Honest caveat:* `canonical_game` is defined for graphs that produce numeric
+stalk values. Non-numeric positions (with switches, hot games) are not evaluated —
+`game_value` returns `nothing` in those cases and the GameForm is left for manual
+inspection.
+
+== How It Is Checked
+
+Tests live in `test/runtests.jl`. Coverage includes:
+
+- Stalk values: `[Blue]` = 1, `[Red]` = -1, `[Blue,Red]` = 1/2, `[Blue,Red,Blue]` = 3/4
+- Green Grundy: two-edge linear Green chain has Grundy value 2
+- Move generation: Blue-only move set has length 1 for Left; Red-only for Right
+- Graph sum: edge count equals sum of component edge counts
+- GraphViz output: contains `"graph Hackenbush"` string
+- Canonical form: single Blue edge produces empty right options
+- ASCII: output contains `"HackenbushGraph"` string
+- `prune_disconnected` removes floating edges
+- `nim_sum` and `mex` arithmetic correctness
 
 == File Map
 
-[cols="1,2"]
+[cols="2,4"]
 |===
 | Path | What's There
 
-| `src/` | Source code
-| `test(s)/` | Test suite
+| `src/HackenbushGames.jl`
+| Entire module (~250 lines). Defines `EdgeColor` enum (`Blue`, `Red`, `Green`),
+  `Edge`, `HackenbushGraph`, `GameForm`. Implements `prune_disconnected`,
+  `cut_edge`, `moves`, `game_sum`, `stalk_value`, `simplest_dyadic_between`,
+  `mex`, `nim_sum`, `green_stalk_nimber`, `green_grundy`, `simple_stalk`,
+  `canonical_game`, `simplify_game`, `game_value`, `to_graphviz`, `to_ascii`.
+
+| `src/backends/abstract.jl`
+| Backend abstraction stub imported by the main module. Provides `current_backend()`
+  and `backend_move_gen` hook for future coprocessor dispatch of move generation
+  over large edge sets.
+
+| `test/runtests.jl`
+| Full test suite covering stalk values, Grundy numbers, move counts, graph sum,
+  canonical form, GraphViz, ASCII, and pruning.
+
+| `Project.toml`
+| Package identity, compat, test deps.
+
+| `LICENSE` / `LICENSES/`
+| PMPL-1.0-or-later full text.
+
+| `benches/`
+| Benchmark scripts for stalk evaluation and Grundy search performance.
+
+| `examples/`
+| Example Julia scripts demonstrating API usage.
+|===
+
+== Dogfooded Across The Account
+
+[cols="2,4"]
+|===
+| Repo | How HackenbushGames (or this domain) appears
+
+| `Hyperpolymath.jl`
+| Listed under "Mathematics & Play" in the umbrella metapackage alongside
+  `KnotTheory.jl`, `Skein.jl`, and `Cladistics.jl` (`using HackenbushGames`).
+
+| `developer-ecosystem/julia-ecosystem/`
+| Part of the combinatorial-game-theory / mathematics tier of the Julia
+  ecosystem subdir packages.
+
+| `nextgen-languages`
+| The combinatorial game theory underpinning Hackenbush (surreal numbers,
+  dyadic rationals) informs type-level design work in languages with dependent
+  types (Idris2 proofs of game value inequalities are a stated future direction).
+
+| `PolyglotFormalisms.jl`
+| Formalisms over game-theoretic domains share structural patterns with the
+  `GameForm{L|R}` representation here.
 |===
 
 == Questions?
