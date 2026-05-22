@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 = HackenbushGames.jl — Show Me The Receipts
 Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 :toc:
@@ -102,7 +102,7 @@ Tests live in `test/runtests.jl`. Coverage includes:
 | Package identity, compat, test deps.
 
 | `LICENSE` / `LICENSES/`
-| PMPL-1.0-or-later full text.
+| MPL-2.0 full text.
 
 | `benches/`
 | Benchmark scripts for stalk evaluation and Grundy search performance.
