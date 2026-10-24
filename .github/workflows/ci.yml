@@ -6,7 +6,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     strategy:
       matrix:
         julia-version: ['1.10', '1.11']
@@ -15,6 +15,7 @@ jobs:
       - uses: julia-actions/setup-julia@fa02766e078afaaf09b14210362cee14137e6a32 # v3.0.2
         with:
           version: ${{ matrix.julia-version }}
+      - uses: julia-actions/cache@9353db09a0f2bbbdec6f41791918c75d37391b36 # v3.5.0
       - name: Install dependencies
         run: julia --project=. -e 'using Pkg; Pkg.develop(url="https://github.com/hyperpolymath/AcceleratorGate.jl.git"); Pkg.instantiate()'
       - name: Run tests
